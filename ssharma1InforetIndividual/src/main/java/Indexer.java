@@ -134,6 +134,13 @@ public class Indexer {
                         fullText += currentLine + " ";
                         currentLine = bufferedReader.readLine();
                     }
+                }
+            }
+        }
+    }
+}
+        
+    
                     /*
                     
                     doc.add(new StringField("bibliography", fullText, Field.Store.YES));
