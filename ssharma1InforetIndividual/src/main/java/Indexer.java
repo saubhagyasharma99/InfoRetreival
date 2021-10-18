@@ -141,24 +141,3 @@ public class Indexer {
 }
         
     
-                    /*
-                    
-                    doc.add(new StringField("bibliography", fullText, Field.Store.YES));
-                    fullText = "";
-                }
-                if (currentLine.startsWith(".W")){
-                    currentLine = bufferedReader.readLine();
-                    while(currentLine != null && !currentLine.startsWith(".I")){
-                        fullText += currentLine + " ";
-                        currentLine = bufferedReader.readLine();
-                    }
-                    //Not storing the words in an attempt to save storage space.
-                    doc.add(new TextField("words", fullText, Field.Store.NO));
-                    fullText = "";
-                }
-                writer.addDocument(doc);
-            }
-        }
-    }
-}
-
