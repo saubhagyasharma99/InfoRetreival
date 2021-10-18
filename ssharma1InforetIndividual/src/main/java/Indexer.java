@@ -134,6 +134,7 @@ public class Indexer {
                     doc.add(new TextField("title", fullText, Field.Store.YES));
                     fullText = "";
                 }
+                
                 if (currentLine.startsWith(".A")){
                     currentLine = bufferedReader.readLine();
                     while(!currentLine.startsWith(".B")){
@@ -156,6 +157,7 @@ public class Indexer {
                     doc.add(new StringField("bibliography", fullText, Field.Store.YES));
                     fullText = "";
                 }
+                
                 if (currentLine.startsWith(".W")){
                     currentLine = bufferedReader.readLine();
                     while(currentLine != null && !currentLine.startsWith(".I")){
