@@ -1,23 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * The base source code from the Lucene website was modified as part of my submission for
- * the module 'Information Retrieval and Web Search (CS7IS3)' in Trinity College Dublin.
- */
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,7 +41,9 @@ public class Indexer {
 
             Directory dir = FSDirectory.open(Paths.get(indexPath));
 
-           
+            //Analyzer analyzer = new SimpleAnalyzer();
+            //Analyzer analyzer = new WhitespaceAnalyzer();
+            //Analyzer analyzer = new StandardAnalyzer();
             Analyzer analyzer = new EnglishAnalyzer();
 
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
@@ -69,7 +51,20 @@ public class Indexer {
             //BM25 Similarity
             iwc.setSimilarity(new BM25Similarity());
 
-            
+            //Classic Similarity
+            //iwc.setSimilarity(new ClassicSimilarity());
+
+            //LMDirichletSimilarity
+            //iwc.setSimilarity(new LMDirichletSimilarity());
+
+            //Trying a multi similarity model
+            //iwc.setSimilarity(new MultiSimilarity(new Similarity[]{new BM25Similarity(),new ClassicSimilarity()}));
+
+            //Trying another multi similarity model
+            //iwc.setSimilarity(new MultiSimilarity(new Similarity[]{new BM25Similarity(),new LMDirichletSimilarity()}));
+
+            //Trying another multi similarity model
+            //iwc.setSimilarity(new MultiSimilarity(new Similarity[]{new ClassicSimilarity(),new LMDirichletSimilarity()}));
 
             iwc.setOpenMode(OpenMode.CREATE);
 
@@ -134,10 +129,25 @@ public class Indexer {
                         fullText += currentLine + " ";
                         currentLine = bufferedReader.readLine();
                     }
+                    /*
+                     * After a bit of analysis, I found that for this dataset, analysing
+                     * and storing bibliography details proved to be slightly inefficient.
+                     */
+                    doc.add(new StringField("bibliography", fullText, Field.Store.YES));
+                    fullText = "";
                 }
+                if (currentLine.startsWith(".W")){
+                    currentLine = bufferedReader.readLine();
+                    while(currentLine != null && !currentLine.startsWith(".I")){
+                        fullText += currentLine + " ";
+                        currentLine = bufferedReader.readLine();
+                    }
+                    //Not storing the words in an attempt to save storage space.
+                    doc.add(new TextField("words", fullText, Field.Store.NO));
+                    fullText = "";
+                }
+                writer.addDocument(doc);
             }
         }
     }
 }
-        
-    
