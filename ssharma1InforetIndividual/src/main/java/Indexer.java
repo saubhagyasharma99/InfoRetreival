@@ -48,7 +48,7 @@ public class Indexer{
 
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
-            //BM25 Similarity
+
             iwc.setSimilarity(new BM25Similarity());
 
           
@@ -58,7 +58,7 @@ public class Indexer{
             IndexWriter writer = new IndexWriter(dir, iwc);
             indexDoc(writer, docDir);
 
-            //Using writer.forceMerge to maximise search performance.
+         
             writer.forceMerge(1);
 
             writer.close();
@@ -85,10 +85,7 @@ static void indexDoc(IndexWriter writer, Path file) throws IOException {
         while(currentLine != null){
             Document doc = new Document();
             if(currentLine.startsWith(".I")){
-                    /*
-                     * I think the ID of the document does not make sense to be analysed,
-                     * hence it is just directly stored without any analysis.
-                     */
+                    
                     doc.add(new StringField("id", currentLine.substring(3), Field.Store.YES));
                     currentLine = bufferedReader.readLine();
                 }
@@ -116,10 +113,7 @@ static void indexDoc(IndexWriter writer, Path file) throws IOException {
                         fullText += currentLine + " ";
                         currentLine = bufferedReader.readLine();
                     }
-                    /*
-                     * After a bit of analysis, I found that for this dataset, analysing
-                     * and storing bibliography details proved to be slightly inefficient.
-                     */
+                    
                     doc.add(new StringField("bibliography", fullText, Field.Store.YES));
                     fullText = "";
                 }
@@ -134,4 +128,4 @@ static void indexDoc(IndexWriter writer, Path file) throws IOException {
 }
 }
 
-//Edited 
+
